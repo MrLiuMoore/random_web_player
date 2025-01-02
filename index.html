@@ -28,18 +28,34 @@
             width: 100%;
             height: 100vh;
             position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
         }
 
         .dplayer {
             height: 100% !important;
+            width: 100% !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .dplayer-video-wrap {
-            height: 100% !important;
+            height: auto !important;
+            width: 100% !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         video {
-            object-fit: cover;
+            object-fit: contain !important;
+            width: 100% !important;
+            height: auto !important;
+            max-height: 100vh;
         }
 
         .right-controls {
@@ -60,16 +76,30 @@
             gap: 5px;
             cursor: pointer;
             color: white;
+            transition: all 0.3s ease;
+            transform: scale(1);
+        }
+
+        .control-button:hover {
+            transform: scale(1.1);
+            opacity: 0.8;
+        }
+
+        .control-button:active {
+            transform: scale(0.9);
+            opacity: 0.6;
         }
 
         .control-button i {
             font-size: 24px;
             text-shadow: 0 0 5px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease;
         }
 
         .control-button span {
             font-size: 12px;
             text-shadow: 0 0 5px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
         }
 
         .bottom-controls {
@@ -94,14 +124,22 @@
             display: flex;
             align-items: center;
             gap: 5px;
+            transition: all 0.3s ease;
+            transform: scale(1);
         }
 
-        .next-button i {
-            font-size: 16px;
+        .next-button:hover {
+            transform: scale(1.05);
+            background: rgba(0, 0, 0, 0.7);
         }
 
         .next-button:active {
             transform: scale(0.95);
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .next-button i {
+            font-size: 16px;
         }
 
         .heart-animation {
@@ -198,18 +236,155 @@
                 bottom: 50px;
             }
         }
+
+        #preview-image {
+            width: 100%;
+            height: 100vh;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #000;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 2;
+            display: block;
+            pointer-events: none;
+        }
+
+        .right-controls {
+            z-index: 999;
+        }
+
+        .bottom-controls {
+            z-index: 999;
+        }
+
+        .progress-bar {
+            z-index: 999;
+        }
+
+        /* 添加播放按钮样式 */
+        .play-button-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 999;
+            text-align: center;
+            pointer-events: none; /* 允许点击穿透到下层 */
+        }
+
+        .play-button {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            animation: pulse 2s infinite;
+        }
+
+        .play-button i {
+            color: white;
+            font-size: 24px;
+            margin-left: 5px; /* 稍微调整播放图标的位置 */
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* 添加缓冲提示样式 */
+        .buffer-hint {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 999;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 14px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .buffer-hint i {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 横屏按钮特殊效果 */
+        .landscape i {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .landscape.active i {
+            transform: rotate(90deg);
+        }
+
+        /* 点赞按钮特殊效果 */
+        .like i {
+            transition: all 0.3s ease;
+        }
+
+        .like:active i {
+            color: #ff2d55;
+            transform: scale(1.2);
+        }
+
+        /* 全屏按钮特殊效果 */
+        .fullscreen i {
+            transition: all 0.3s ease;
+        }
+
+        .fullscreen.active i {
+            transform: rotate(180deg);
+        }
+
+        /* 分享按钮特殊效果 */
+        .share:active i {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: rotate(0); }
+            25% { transform: rotate(-15deg); }
+            75% { transform: rotate(15deg); }
+        }
     </style>
 </head>
 <body>
+    <div id="preview-image"></div>
     <div id="player"></div>
     <div class="right-controls">
         <div class="control-button like">
             <i class="fas fa-heart"></i>
             <span>0</span>
         </div>
-        <div class="control-button comment">
-            <i class="fas fa-comment"></i>
-            <span>0</span>
+        <div class="control-button landscape">
+            <i class="fas fa-mobile-alt"></i>
+            <span>横屏</span>
         </div>
         <div class="control-button share">
             <i class="fas fa-share"></i>
@@ -230,6 +405,15 @@
         <div class="progress"></div>
     </div>
     <div class="time-display">00:00 / 00:00</div>
+    <div class="play-button-container">
+        <div class="play-button">
+            <i class="fas fa-play"></i>
+        </div>
+    </div>
+    <div class="buffer-hint">
+        <i class="fas fa-spinner"></i>
+        正在缓冲...
+    </div>
 
     <script>
         let dp = null;
@@ -264,16 +448,13 @@
                     mode: 'cors'
                 });
 
-                // 尝试解析 JSON
-                try {
-                    const data = await response.json();
-                    if (data && data.url) {
-                        return data.url;
-                    }
-                } catch (jsonError) {
-                    // 如果解析 JSON 失败，尝试获取纯文本
-                    const url = await response.text();
-                    return url;
+                const data = await response.json();
+                if (data && data.url) {
+                    // 返回包含视频URL和图片URL的对象
+                    return {
+                        videoUrl: data.url,
+                        imageUrl: data.img_url || "./image/no_preview.png"
+                    };
                 }
 
                 console.error('无法解析视频地址');
@@ -287,11 +468,19 @@
         // 创建播放器
         async function createPlayer() {
             try {
-                const url = await getVideoUrl();
-                if (!url) {
+                const data = await getVideoUrl();
+                if (!data || !data.videoUrl) {
                     console.error('无法获取视频地址');
                     return;
                 }
+
+                // 获取缓冲提示元素
+                const bufferHint = document.querySelector('.buffer-hint');
+
+                // 显示预览图
+                const previewImage = document.getElementById('preview-image');
+                previewImage.style.backgroundImage = `url('${data.imageUrl}')`;
+                previewImage.style.display = "block";
 
                 if (dp) {
                     dp.destroy();
@@ -299,24 +488,28 @@
 
                 // 检查 URL 的格式
                 let videoType;
-                if (url.endsWith('.mp4')) {
-                    videoType = 'auto'; // MP4 格式
-                } else if (url.endsWith('.flv')) {
-                    videoType = 'flv'; // FLV 格式
-                } else if (url.endsWith('.m3u8')) {
-                    videoType = 'hls'; // HLS 格式
+                if (data.videoUrl.endsWith('.mp4')) {
+                    videoType = 'auto';
+                } else if (data.videoUrl.endsWith('.flv')) {
+                    videoType = 'flv';
+                } else if (data.videoUrl.endsWith('.m3u8')) {
+                    videoType = 'hls';
                 } else {
-                    console.error('不支持的视频格式');
-                    return;
+                    videoType = 'auto';
                 }
 
                 dp = new DPlayer({
                     container: document.getElementById('player'),
-                    autoplay: true,
+                    autoplay: false,
                     theme: '#FADFA3',
+                    hotkey: true,
+                    preload: 'auto',
+                    volume: 1,
+                    playbackSpeed: [0.5, 0.75, 1, 1.25, 1.5, 2],
                     video: {
-                        url: url,
-                        type: videoType, // 根据视频类型设置
+                        url: data.videoUrl,
+                        type: videoType,
+                        pic: data.imageUrl, // 使用接口返回的图片URL作为视频封面
                         customType: {
                             'hls': function (video, player) {
                                 const hls = new Hls({
@@ -324,43 +517,93 @@
                                     enableWorker: true,
                                     lowLatencyMode: true
                                 });
-                                hls.loadSource(url);
+                                hls.loadSource(data.videoUrl);
                                 hls.attachMedia(video);
                                 
-                                // 添加全屏相关事件监听
-                                video.addEventListener('webkitbeginfullscreen', updateFullscreenButton);
-                                video.addEventListener('webkitendfullscreen', updateFullscreenButton);
-                                
-                                hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                                    video.play().catch(function(e) {
-                                        console.log("播放失败:", e);
-                                    });
+                                // 视频可以播放时的处理
+                                video.addEventListener('canplay', function() {
+                                    // 不要自动播放，等待用户操作
+                                    console.log('视频可以播放');
                                 });
-                            },
-                            'flv': function (video, player) {
-                                // FLV 播放逻辑（需要引入 flv.js）
-                                if (flvjs.isSupported()) {
-                                    const flvPlayer = flvjs.createPlayer({
-                                        type: 'flv',
-                                        url: url
-                                    });
-                                    flvPlayer.attachMediaElement(video);
-                                    flvPlayer.load();
-                                    flvPlayer.play();
-                                } else {
-                                    console.error('FLV 不被支持');
-                                }
+
+                                // 视频开始播放时的处理
+                                video.addEventListener('playing', function() {
+                                    if (video.currentTime > 0.1) {
+                                        previewImage.style.display = 'none';
+                                    }
+                                });
+
+                                // 视频缓冲时的处理
+                                video.addEventListener('waiting', function() {
+                                    previewImage.style.display = 'block';
+                                });
+
+                                // 视频错误时的处理
+                                video.addEventListener('error', function(e) {
+                                    console.error('视频播放错误:', e);
+                                    previewImage.style.display = 'block';
+                                });
+
+                                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                                    console.log('HLS 清单解析完成');
+                                });
+
+                                hls.on(Hls.Events.ERROR, function(event, data) {
+                                    console.error('HLS 错误:', data);
+                                    if (data.fatal) {
+                                        switch(data.type) {
+                                            case Hls.ErrorTypes.NETWORK_ERROR:
+                                                hls.startLoad();
+                                                break;
+                                            case Hls.ErrorTypes.MEDIA_ERROR:
+                                                hls.recoverMediaError();
+                                                break;
+                                            default:
+                                                console.error('无法恢复的错误');
+                                                break;
+                                        }
+                                    }
+                                });
                             }
                         }
-                    },
-                    preload: 'auto',
-                    volume: 1
+                    }
                 });
 
-                // 更新进度条
+                // DPlayer 事件监听
+                dp.on('loadstart', () => {
+                    console.log('视频开始加载');
+                });
+
+                dp.on('loadeddata', () => {
+                    console.log('视频数据加载完成');
+                    // 确保显示预览图，等待用户点击播放
+                    previewImage.style.display = 'block';
+                });
+
                 dp.on('timeupdate', () => {
                     const percent = (dp.video.currentTime / dp.video.duration) * 100;
                     document.querySelector('.progress').style.width = `${percent}%`;
+                    
+                    if (dp.video.currentTime > 0.1) {
+                        previewImage.style.display = 'none';
+                        bufferHint.style.display = 'none';
+                    }
+                });
+
+                dp.on('waiting', () => {
+                    if (!dp.video.paused) {
+                        console.log('视频缓冲中');
+                        bufferHint.style.display = 'flex';
+                    }
+                });
+
+                dp.on('playing', () => {
+                    bufferHint.style.display = 'none';
+                });
+
+                dp.on('error', () => {
+                    console.error('播放器错误');
+                    previewImage.style.display = 'block';
                 });
 
                 // 视频结束时自动播放下一个
@@ -381,8 +624,57 @@
                 playerElement.addEventListener('touchstart', handleTouchStart);
                 playerElement.addEventListener('touchend', handleTouchEnd);
 
+                // 显示播放按钮
+                const playButton = document.querySelector('.play-button-container');
+                playButton.style.display = 'flex';
+
+                dp.on('play', () => {
+                    playButton.style.display = 'none';
+                });
+
+                dp.on('pause', () => {
+                    playButton.style.display = 'flex';
+                    bufferHint.style.display = 'none';
+                });
+
+                // 添加缓冲状态监听
+                dp.on('waiting', () => {
+                    if (!dp.video.paused) {
+                        console.log('视频缓冲中');
+                        bufferHint.style.display = 'flex';
+                    }
+                });
+
+                dp.on('playing', () => {
+                    bufferHint.style.display = 'none';
+                });
+
+                dp.on('timeupdate', () => {
+                    const percent = (dp.video.currentTime / dp.video.duration) * 100;
+                    document.querySelector('.progress').style.width = `${percent}%`;
+                    
+                    if (dp.video.currentTime > 0.1) {
+                        previewImage.style.display = 'none';
+                        bufferHint.style.display = 'none';
+                    }
+                });
+
+                // 视频加载时显示缓冲提示
+                dp.on('loadstart', () => {
+                    console.log('视频开始加载');
+                });
+
+                dp.on('canplay', () => {
+                    if (!dp.video.paused) {
+                        bufferHint.style.display = 'none';
+                    }
+                });
+
             } catch (error) {
                 console.error('创建播放器失败:', error);
+                const previewImage = document.getElementById('preview-image');
+                previewImage.style.backgroundImage = `url('${createNoPreviewImage()}')`;
+                previewImage.style.display = 'block';
             }
         }
 
@@ -415,20 +707,45 @@
                     addHeart(touchEndX, touchEndY);
                     lastTapTime = 0;
                 } else {
-                    // 单击
+                    // 单击 - 添加时间间隔检查
+                    if (touchEndTime - lastToggleTime > 500) { // 设置500ms的最小间隔
                     lastTapTime = touchEndTime;
+                        lastToggleTime = touchEndTime;
                     togglePlay();
+                    }
                 }
             }
         }
 
         // 切换播放状态
         function togglePlay() {
-            if (!dp) return;
-            if (dp.video.paused) {
-                dp.play();
-            } else {
-                dp.pause();
+            if (!dp || !dp.video) return;
+            
+            try {
+                const playButton = document.querySelector('.play-button-container');
+                const bufferHint = document.querySelector('.buffer-hint');
+                
+                if (dp.video.paused) {
+                    // 播放时显示加载动画或提示
+                    const previewImage = document.getElementById('preview-image');
+                    previewImage.style.display = 'block';
+                    bufferHint.style.display = 'flex';
+                    
+                    // 使用 try-catch 包装播放操作
+                    try {
+                        dp.play();
+                        playButton.style.display = 'none';
+                    } catch (error) {
+                        console.error('播放失败:', error);
+                        bufferHint.style.display = 'none';
+                    }
+                } else {
+                    dp.pause();
+                    playButton.style.display = 'flex';
+                    bufferHint.style.display = 'none';
+                }
+            } catch (error) {
+                console.error('切换播放状态失败:', error);
             }
         }
 
@@ -448,6 +765,8 @@
 
         // 播放下一个视频
         async function playNext() {
+            const previewImage = document.getElementById('preview-image');
+            previewImage.style.display = "block";
             await createPlayer();
         }
 
@@ -458,9 +777,9 @@
             document.querySelector('.like span').textContent = likeCount;
         });
 
-        document.querySelector('.comment').addEventListener('click', (e) => {
+        document.querySelector('.landscape').addEventListener('click', (e) => {
             e.stopPropagation();
-            alert('评论功能开发中...');
+            toggleLandscape();
         });
 
         document.querySelector('.share').addEventListener('click', (e) => {
@@ -469,6 +788,7 @@
         });
 
         let lastTapTime = 0;
+        let lastToggleTime = 0; // 添加最后一次切换播放状态的时间记录
         
         // 页面加载时开始播放
         window.onload = createPlayer;
@@ -609,7 +929,7 @@
             timeDisplay.textContent = `${formatTime(dp.video.currentTime)} / ${formatTime(dp.video.duration)}`;
         }
 
-        // 添加进度条拖动功能
+        // 修改进度条拖动功能
         const progressBar = document.querySelector('.progress-bar');
         progressBar.addEventListener('touchstart', handleProgressTouch);
         progressBar.addEventListener('touchmove', handleProgressTouch);
@@ -622,9 +942,26 @@
             const x = e.touches[0].clientX - rect.left;
             const percent = Math.min(Math.max(x / rect.width, 0), 1);
             
+            // 更新进度条
             dp.video.currentTime = dp.video.duration * percent;
             updateProgress();
+
+            // 显示预览图
+            const previewImage = document.getElementById('preview-image');
+            if (dp.options.video.pic) {
+                // 如果有接口返回的图片URL，优先使用
+                previewImage.style.backgroundImage = `url('${dp.options.video.pic}')`;
+            }
+            previewImage.style.display = 'block';
         }
+
+        // 添加进度条触摸结束事件
+        progressBar.addEventListener('touchend', () => {
+            // 如果视频正在播放，隐藏预览图
+            if (!dp.video.paused && dp.video.currentTime > 0.1) {
+                document.getElementById('preview-image').style.display = 'none';
+            }
+        });
 
         // 在创建播放器时添加进度更新
         dp.on('timeupdate', updateProgress);
@@ -640,6 +977,91 @@
             setTimeout(() => {
                 document.querySelector('.time-display').style.display = 'none';
             }, 1500);
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const previewImage = document.getElementById('preview-image');
+            previewImage.style.backgroundImage = "url('./image/no_preview.png')";
+            previewImage.style.display = "block"; // 显示预览图
+        });
+
+        // 页面加载完成后立即显示预览图
+        window.addEventListener('load', function() {
+            const previewImage = document.getElementById('preview-image');
+            previewImage.style.backgroundImage = "url('./image/no_preview.png')";
+            previewImage.style.display = "block";
+        });
+
+        // 添加横屏按钮的事件监听
+        document.querySelector('.landscape').addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleLandscape();
+        });
+
+        // 添加横屏切换功能
+        function toggleLandscape() {
+            try {
+                // 检查是否支持 screen.orientation
+                if (screen.orientation && screen.orientation.lock) {
+                    if (screen.orientation.type.includes('landscape')) {
+                        screen.orientation.unlock();
+                        updateLandscapeButton(false);
+                    } else {
+                        screen.orientation.lock('landscape')
+                            .then(() => {
+                                updateLandscapeButton(true);
+                            })
+                            .catch(() => {
+                                // 如果不支持 orientation lock，尝试使用替代方法
+                                tryAlternativeLandscape();
+                            });
+                    }
+                } else {
+                    // 使用替代方法
+                    tryAlternativeLandscape();
+                }
+            } catch (error) {
+                console.log('使用替代方法切换横屏');
+                tryAlternativeLandscape();
+            }
+        }
+
+        // 添加替代的横屏切换方法
+        function tryAlternativeLandscape() {
+            try {
+                // 检查当前方向
+                const isLandscape = window.matchMedia('(orientation: landscape)').matches;
+                
+                if (isLandscape) {
+                    // 当前是横屏，提示用户手动切换回竖屏
+                    updateLandscapeButton(false);
+                    alert('请手动将设备旋转回竖屏模式');
+                } else {
+                    // 当前是竖屏，提示用户手动切换到横屏
+                    updateLandscapeButton(true);
+                    alert('请将设备旋转到横屏模式以获得更好的观看体验');
+                }
+            } catch (error) {
+                console.error('横屏切换失败:', error);
+            }
+        }
+
+        // 更新横屏按钮状态
+        function updateLandscapeButton(isLandscape) {
+            const landscapeButton = document.querySelector('.landscape');
+            if (isLandscape) {
+                landscapeButton.querySelector('i').className = 'fas fa-mobile-alt fa-rotate-90';
+                landscapeButton.querySelector('span').textContent = '竖屏';
+            } else {
+                landscapeButton.querySelector('i').className = 'fas fa-mobile-alt';
+                landscapeButton.querySelector('span').textContent = '横屏';
+            }
+        }
+
+        // 监听屏幕方向变化
+        window.addEventListener('orientationchange', function() {
+            const isLandscape = window.orientation === 90 || window.orientation === -90;
+            updateLandscapeButton(isLandscape);
         });
     </script>
 </body>
