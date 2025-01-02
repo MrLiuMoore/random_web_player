@@ -1,9 +1,12 @@
 # Random Web Player
-配合接口实现类似抖音效果的随机在线播放器，内置接口提供了 50W+ 随机地址播放
+配合接口实现类似抖音效果的随机在线播放器，内置接口提供了 50W+ 随机地址播放  
 
 
-Cloudflare Page: https://random-web-player.pages.dev/
+Cloudflare Page: https://random-web-player.pages.dev/  
+  
 Vercel Page: https://random-web-player.vercel.app/
+
+****
 
 [![GitHub license](https://img.shields.io/github/license/levywang/random_web_player?label=License&logo=github)](https://github.com/levywang/random_web_player "Click to view the repo on Github")
 [![Release Version](https://img.shields.io/github/release/levywang/random_web_player?include_prereleases&label=Release&logo=github)](https://github.com/levywang/random_web_player/releases/latest "Click to view the repo on Github")
@@ -11,18 +14,14 @@ Vercel Page: https://random-web-player.vercel.app/
 [![GitHub Fork](https://img.shields.io/github/forks/levywang/random_web_player?label=Forks&logo=github)](https://github.com/levywang/random_web_player "Click to view the repo on Github")
 [![Repo Size](https://img.shields.io/github/repo-size/levywang/random_web_player?label=Size&logo=github)](https://github.com/levywang/random_web_player "Click to view the repo on Github")
 [![GitHub Fork](https://img.shields.io/github/issues-closed-raw/levywang/random_web_player?label=Closed%20Issue&logo=github)](https://github.com/levywang/random_web_player/issues?q=is%3Aissue+is%3Aclosed "Click to view the repo on Github")
-
-
-
-
+  
+    
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=levywang/random_web_player&type=Date)](https://star-history.com/#levywang/random_web_player&Date)
-
-
-
-
-
+  
+    
+   
 ## 使用方法
 直接下载 `index.html` 文件，复制到网站根目录，配置好域名即可访问
 
@@ -48,9 +47,8 @@ https://txmov2.a.yximgs.com/upic/2021/07/06/11/BMjAyMTA3MDYxMTIxNDZfMjM2MzkyOTY3
 ```
 
 **PS：请确保请求地址支持跨域，否则无法正常播放**
-
-
-
+  
+    
 
 ## 自建API教程
 **注意：Python Version >= 3.7**
@@ -68,7 +66,8 @@ uvicorn main:app --host 0.0.0.0 --reload
 可以配置反代和域名，替换 `index.html` 中的 `https://api.wwlww.org/v1/get_video`
 
 **注意 `main.py` 文件中的路径地址，为爬取到的播放源地址，参考 `video_urls.txt`**
-
+  
+    
 
 ## 爬虫说明
 该爬虫支持爬取开启了 nginx autoindex 网站，运行前请确认变量 `base_url` 是否可以访问，默认会爬取所有 `m3u8` 地址，存储到 `m3u8_links.txt` 文件中
@@ -77,9 +76,8 @@ uvicorn main:app --host 0.0.0.0 --reload
 ```bash
 pip install requests beautifulsoup4
 ```
-
-
-
+  
+    
 
 ## 关于爬虫源地址的说明
 使用 `https://www.zoomeye.ai/` (挂代理)，搜索规则如下：
@@ -92,8 +90,8 @@ pip install requests beautifulsoup4
 
 可以获取到很多类似的地址，见下图：
 ![zoomeye](./image//zoomeye.png)
-
-
+  
+    
 
 ## License
 This project is provided under a GNU Affero General Public License v3.0 license that can be found in the [LICENSE](LICENSE) file. By using, distributing, or contributing to this project, you agree to the terms and conditions of this license.
