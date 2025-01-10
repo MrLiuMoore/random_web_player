@@ -14,6 +14,9 @@ Vercel Page: https://random-web-player.vercel.app/
 [![GitHub Fork](https://img.shields.io/github/forks/levywang/random_web_player?label=Forks&logo=github)](https://github.com/levywang/random_web_player/forks?include=active%2Carchived%2Cinactive%2Cnetwork&page=1&period=2y&sort_by=stargazer_counts "Click to view the repo on Github")
 [![Repo Size](https://img.shields.io/github/repo-size/levywang/random_web_player?label=Size&logo=github)](https://github.com/levywang/random_web_player "Click to view the repo on Github")
 [![GitHub Issue](https://img.shields.io/github/issues-closed-raw/levywang/random_web_player?label=Closed%20Issue&logo=github)](https://github.com/levywang/random_web_player/issues?q=is%3Aissue+is%3Aclosed "Click to view the repo on Github")
+
+[![Docker Stars](https://img.shields.io/docker/stars/levywang/random_web_player?label=Stars&logo=docker)](https://hub.docker.com/r/levywang/random_web_player "Click to view the image on Docker Hub")
+[![Docker Pulls](https://img.shields.io/docker/pulls/levywang/random_web_player?label=Pulls&logo=docker)](https://hub.docker.com/r/levywang/random_web_player "Click to view the image on Docker Hub")
   
     
 ## Star History
