@@ -43,7 +43,7 @@ python main.py
 ```bash
 git clone https://github.com/levywang/random_web_player.git
 cd random_web_player
-docker run -d -p <your_server_port>:80 -v $PWD:/app --name random-web-player random-web-player:latest
+docker run -d -p <your_server_port>:80 -v $PWD:/app --name random_web_player random_web_player:latest
 ```
 
 ### 直接配置`index.html`
