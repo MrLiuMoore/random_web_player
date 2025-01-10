@@ -1,6 +1,6 @@
 <!doctype html>
 <html>
-<head> 
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <title>视频播放器</title>
@@ -443,7 +443,7 @@
         // 获取视频地址
         async function getVideoUrl() {
             try {
-                const response = await fetch('https://api.wwlww.org/v1/get_video', {
+                const response = await fetch('/api/v1/get_video', {
                     method: 'GET',
                     mode: 'cors'
                 });
@@ -453,7 +453,7 @@
                     // 返回包含视频URL和图片URL的对象
                     return {
                         videoUrl: data.url,
-                        imageUrl: data.img_url || "./image/no_preview.png"
+                        imageUrl: data.img_url || "/app/image/no_preview.png"
                     };
                 }
 
@@ -519,7 +519,7 @@
                                 });
                                 hls.loadSource(data.videoUrl);
                                 hls.attachMedia(video);
-                                
+
                                 // 视频可以播放时的处理
                                 video.addEventListener('canplay', function() {
                                     // 不要自动播放，等待用户操作
@@ -583,7 +583,7 @@
                 dp.on('timeupdate', () => {
                     const percent = (dp.video.currentTime / dp.video.duration) * 100;
                     document.querySelector('.progress').style.width = `${percent}%`;
-                    
+
                     if (dp.video.currentTime > 0.1) {
                         previewImage.style.display = 'none';
                         bufferHint.style.display = 'none';
@@ -652,7 +652,7 @@
                 dp.on('timeupdate', () => {
                     const percent = (dp.video.currentTime / dp.video.duration) * 100;
                     document.querySelector('.progress').style.width = `${percent}%`;
-                    
+
                     if (dp.video.currentTime > 0.1) {
                         previewImage.style.display = 'none';
                         bufferHint.style.display = 'none';
@@ -689,14 +689,14 @@
         // 处理触摸结束
         function handleTouchEnd(e) {
             if (e.target.closest('.controls') || e.target.closest('.right-controls')) return;
-            
+
             const touchEndTime = Date.now();
             const touchEndX = e.changedTouches[0].clientX;
             const touchEndY = e.changedTouches[0].clientY;
-            
+
             const touchDuration = touchEndTime - touchStartTime;
             const moveDistance = Math.sqrt(
-                Math.pow(touchEndX - touchStartX, 2) + 
+                Math.pow(touchEndX - touchStartX, 2) +
                 Math.pow(touchEndY - touchStartY, 2)
             );
 
@@ -720,17 +720,17 @@
         // 切换播放状态
         function togglePlay() {
             if (!dp || !dp.video) return;
-            
+
             try {
                 const playButton = document.querySelector('.play-button-container');
                 const bufferHint = document.querySelector('.buffer-hint');
-                
+
                 if (dp.video.paused) {
                     // 播放时显示加载动画或提示
                     const previewImage = document.getElementById('preview-image');
                     previewImage.style.display = 'block';
                     bufferHint.style.display = 'flex';
-                    
+
                     // 使用 try-catch 包装播放操作
                     try {
                         dp.play();
@@ -756,10 +756,10 @@
             heart.style.left = `${x - 50}px`;
             heart.style.top = `${y - 50}px`;
             document.body.appendChild(heart);
-            
+
             likeCount++;
             document.querySelector('.like span').textContent = likeCount;
-            
+
             setTimeout(() => heart.remove(), 800);
         }
 
@@ -789,7 +789,7 @@
 
         let lastTapTime = 0;
         let lastToggleTime = 0; // 添加最后一次切换播放状态的时间记录
-        
+
         // 页面加载时开始播放
         window.onload = createPlayer;
 
@@ -802,10 +802,10 @@
         // 切换全屏状态
         function toggleFullscreen() {
             if (!dp || !dp.video) return;
-            
+
             // 获取视频元素
             const video = dp.video;
-            
+
             if (!document.fullscreenElement && !document.webkitFullscreenElement) {
                 // 进入全屏
                 if (video.requestFullscreen) {
@@ -819,7 +819,7 @@
                 } else if (video.msRequestFullscreen) {
                     video.msRequestFullscreen();
                 }
-                
+
                 // 尝试移动端特有的全屏API
                 try {
                     if (video.webkitSupportsFullscreen && !video.webkitDisplayingFullscreen) {
@@ -832,10 +832,10 @@
                 // 更新按钮状态
                 document.querySelector('.fullscreen i').className = 'fas fa-compress';
                 document.querySelector('.fullscreen span').textContent = '退出';
-                
+
                 // 设置视频样式
                 video.style.objectFit = 'contain';
-                
+
                 // 强制横屏
                 if (screen.orientation && screen.orientation.lock) {
                     screen.orientation.lock('landscape').catch(function(error) {
@@ -853,14 +853,14 @@
                 } else if (document.msExitFullscreen) {
                     document.msExitFullscreen();
                 }
-                
+
                 // 更新按钮状态
                 document.querySelector('.fullscreen i').className = 'fas fa-expand';
                 document.querySelector('.fullscreen span').textContent = '全屏';
-                
+
                 // 恢复视频样式
                 video.style.objectFit = 'cover';
-                
+
                 // 解除横屏锁定
                 if (screen.orientation && screen.orientation.unlock) {
                     screen.orientation.unlock();
@@ -871,17 +871,17 @@
         // 更新全屏按钮状态处理
         function updateFullscreenButton() {
             if (!dp || !dp.video) return;
-            
+
             const video = dp.video;
-            const isFullscreen = document.fullscreenElement || 
-                                document.webkitFullscreenElement || 
-                                document.mozFullScreenElement || 
+            const isFullscreen = document.fullscreenElement ||
+                                document.webkitFullscreenElement ||
+                                document.mozFullScreenElement ||
                                 document.msFullscreenElement ||
                                 (video.webkitDisplayingFullscreen === true);
-            
+
             const icon = document.querySelector('.fullscreen i');
             const text = document.querySelector('.fullscreen span');
-            
+
             if (isFullscreen) {
                 icon.className = 'fas fa-compress';
                 text.textContent = '退出';
@@ -904,7 +904,7 @@
             dp.video.addEventListener('webkitbeginfullscreen', function() {
                 updateFullscreenButton();
             });
-            
+
             dp.video.addEventListener('webkitendfullscreen', function() {
                 updateFullscreenButton();
             });
@@ -920,11 +920,11 @@
         // 更新进度条和时间显示
         function updateProgress() {
             if (!dp || !dp.video) return;
-            
+
             const percent = (dp.video.currentTime / dp.video.duration) * 100;
             const progress = document.querySelector('.progress');
             const timeDisplay = document.querySelector('.time-display');
-            
+
             progress.style.width = `${percent}%`;
             timeDisplay.textContent = `${formatTime(dp.video.currentTime)} / ${formatTime(dp.video.duration)}`;
         }
@@ -941,7 +941,7 @@
             const rect = progressBar.getBoundingClientRect();
             const x = e.touches[0].clientX - rect.left;
             const percent = Math.min(Math.max(x / rect.width, 0), 1);
-            
+
             // 更新进度条
             dp.video.currentTime = dp.video.duration * percent;
             updateProgress();
@@ -981,14 +981,14 @@
 
         document.addEventListener("DOMContentLoaded", function() {
             const previewImage = document.getElementById('preview-image');
-            previewImage.style.backgroundImage = "url('./image/no_preview.png')";
+            previewImage.style.backgroundImage = "url('/image/no_preview.png')";
             previewImage.style.display = "block"; // 显示预览图
         });
 
         // 页面加载完成后立即显示预览图
         window.addEventListener('load', function() {
             const previewImage = document.getElementById('preview-image');
-            previewImage.style.backgroundImage = "url('./image/no_preview.png')";
+            previewImage.style.backgroundImage = "url('/image/no_preview.png')";
             previewImage.style.display = "block";
         });
 
@@ -1031,7 +1031,7 @@
             try {
                 // 检查当前方向
                 const isLandscape = window.matchMedia('(orientation: landscape)').matches;
-                
+
                 if (isLandscape) {
                     // 当前是横屏，提示用户手动切换回竖屏
                     updateLandscapeButton(false);
@@ -1065,4 +1065,4 @@
         });
     </script>
 </body>
-</html> 
+</html>
